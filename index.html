@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafeteria da Cláudia</title>
+    <style>
+        :root {
+            --primary: #6F4E37; /* Coffee brown */
+            --secondary: #C8B6A6;
+            --accent: #D4A373;
+            --bg: #FDFBF7;
+            --text: #2C2C2C;
+            --white: #FFFFFF;
+            --card-bg: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content Container */
+        .main-container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Página Inicial (Home) */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(rgba(111, 78, 55, 0.8), rgba(111, 78, 55, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%236F4E37" width="100" height="100"/></svg>');
+            background-size: cover;
+            color: var(--white);
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: var(--text);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #c29263;
+        }
+
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card-info {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--primary);
+        }
+
+        .card-info h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Página Cardápio */
+        .section-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-img {
+            height: 180px;
+            background-color: #e2dcd6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .menu-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .menu-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #2b7a0b;
+        }
+
+        .menu-desc {
+            font-size: 0.95rem;
+            color: #666;
+            flex: 1;
+        }
+
+        /* Página Contato */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .contact-form {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .contact-info {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .contact-info h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary);
+                padding: 1rem 0;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            nav ul.show {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            ☕ Cafeteria da Cláudia
+        </div>
+        <div class="menu-toggle" id="mobile-menu">&#9776;</div>
+        <nav>
+            <ul id="nav-list">
+                <li><a class="nav-link active" onclick="switchPage('home')">Página Inicial</a></li>
+                <li><a class="nav-link" onclick="switchPage('cardapio')">Cardápio</a></li>
+                <li><a class="nav-link" onclick="switchPage('contato')">Contato</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+
+        <!-- PÁGINA INICIAL -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Bem-vindo à Cafeteria da Cláudia</h1>
+                <p>O lugar perfeito para saborear um café artesanal aconchegante, doces irresistíveis e momentos inesquecíveis.</p>
+                <a class="btn" onclick="switchPage('cardapio')">Ver Cardápio</a>
+            </div>
+
+            <div class="info-section">
+                <div class="card-info">
+                    <h3>☕ Sobre a Cafeteria</h3>
+                    <p>Fundada com paixão pela tradição do bom café, a Cafeteria da Cláudia oferece grãos selecionados da mais alta qualidade, torrados na medida certa para proporcionar uma experiência única a cada xícara.</p>
+                </div>
+                <div class="card-info">
+                    <h3>🕒 Horário de Funcionamento</h3>
+                    <p><strong>Segunda a Sexta:</strong> 08:00 às 20:00<br>
+                    <strong>Sábados e Domingos:</strong> 09:00 às 19:00</p>
+                    <p style="margin-top: 10px;"><strong>📍 Endereço:</strong> Rua das Flores, 123 - Centro</p>
+                    <p><strong>📞 Telefone:</strong> (47) 99888-7766</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PÁGINA CARDÁPIO -->
+        <div id="cardapio" class="page">
+            <h2 class="section-title">Nosso Cardápio</h2>
+            <div class="menu-grid">
+                
+                <!-- Item 1 -->
+                <div class="menu-item">
+                    <div class="menu-img">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Café Espresso">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-header">
+                            <span class="menu-title">Café Espresso</span>
+                            <span class="menu-price">R$ 7,00</span>
+                        </div>
+                        <p class="menu-desc">Café espresso encorpado, extraído com grãos selecionados 100% arábica.</p>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="menu-item">
+                    <div class="menu-img">
+                        <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" alt="Cappuccino Cremoso">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-header">
+                            <span class="menu-title">Cappuccino Cremoso</span>
+                            <span class="menu-price">R$ 12,00</span>
+                        </div>
+                        <p class="menu-desc">Espresso, leite vaporizado, uma generosa camada de espuma cremosa e toque de cacau.</p>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="menu-item">
+                    <div class="menu-img">
+                        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80" alt="Café Gelado da Casa">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-header">
+                            <span class="menu-title">Café Gelado da Casa</span>
+                            <span class="menu-price">R$ 14,50</span>
+                        </div>
+                        <p class="menu-desc">Café especial gelado batido com leite, calda de caramelo e gelo.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="menu-item">
+                    <div class="menu-img">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" alt="Bolo Caseiro de Chocolate">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-header">
+                            <span class="menu-title">Bolo Caseiro de Chocolate</span>
+                            <span class="menu-price">R$ 9,00</span>
+                        </div>
+                        <p class="menu-desc">Fatia generosa de bolo fofinho com cobertura cremosa de chocolate belga.</p>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="menu-item">
+                    <div class="menu-img">
+                        <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" alt="Croissant Manteiga">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-header">
+                            <span class="menu-title">Croissant de Manteiga</span>
+                            <span class="menu-price">R$ 8,50</span>
+                        </div>
+                        <p class="menu-desc">Croissant artesanal folhado, leve e crocante, assado na hora.</p>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="menu-item">
+                    <div class="menu-img">
+                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=600&q=80" alt="Cheesecake de Frutas Vermelhas">
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-header">
+                            <span class="menu-title">Cheesecake Vermelho</span>
+                            <span class="menu-price">R$ 15,00</span>
+                        </div>
+                        <p class="menu-desc">Fatia de cheesecake cremoso com calda artesanal de frutas vermelhas.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PÁGINA CONTATO -->
+        <div id="contato" class="page">
+            <h2 class="section-title">Fale Conosco</h2>
+            <div class="contact-container">
+                <div class="contact-form">
+                    <form id="form-contato" onsubmit="enviarMensagem(event)">
+                        <div class="form-group">
+                            <label for="nome">Nome:</label>
+                            <input type="text" id="nome" required placeholder="Digite seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" required placeholder="seu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="mensagem">Mensagem:</label>
+                            <textarea id="mensagem" required placeholder="Escreva sua dúvida, sugestão ou comentário..."></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Enviar Mensagem</button>
+                    </form>
+                    <div id="msg-sucesso" class="success-message">
+                        Mensagem enviada com sucesso! Entraremos em contato em breve.
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <h3>Informações de Contato</h3>
+                    <p><strong>📍 Endereço:</strong><br>Rua das Flores, 123 - Centro</p>
+                    <p><strong>📞 Telefone:</strong><br>(47) 99888-7766</p>
+                    <p><strong>✉️ E-mail:</strong><br>contato@cafeteriadaclaudia.com.br</p>
+                    <p><strong>🕒 Horário de Atendimento:</strong><br>Segunda a Sexta: 08:00 às 20:00<br>Sábados e Domingos: 09:00 às 19:00</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Cafeteria da Cláudia. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Navegação por abas
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active'));
+
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            event.target.classList.add('active');
+
+            // Fechar menu mobile se aberto
+            document.getElementById('nav-list').classList.remove('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle menu mobile
+        document.getElementById('mobile-menu').addEventListener('click', () => {
+            document.getElementById('nav-list').classList.toggle('show');
+        });
+
+        // Simulação de envio do formulário de contato
+        function enviarMensagem(event) {
+            event.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const mensagem = document.getElementById('mensagem').value;
+
+            if (nome && email && mensagem) {
+                document.getElementById('form-contato').reset();
+                const successDiv = document.getElementById('msg-sucesso');
+                successDiv.style.display = 'block';
+                setTimeout(() => {
+                    successDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
+cafeteria_claudia.html
+Exibindo cafeteria_claudia.html.
